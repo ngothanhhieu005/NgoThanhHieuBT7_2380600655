@@ -1,0 +1,53 @@
+using DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BUSS
+{
+    public class MajorService
+    {
+        public List<Major> GetAll()
+        {
+            Model1 context = new Model1();
+            return context.Major.ToList();
+        }
+
+        // 2. Lấy tất cả các Chuyên ngành theo Khoa (FacultyID) - Dựa trên ví dụ mẫu
+        public List<Major> GetAllByFaculty(int facultyID)
+        {
+            Model1 context = new Model1();
+            return context.Major.Where(p => p.FacultyID == facultyID).ToList();
+        }
+
+        // 3. Tìm Chuyên ngành theo ID
+        public Major FindByID(int majorID)
+        {
+            Model1 context = new Model1();
+            return context.Major.FirstOrDefault(p => p.MajorID == majorID);
+        }
+
+        // 4. Thêm hoặc Cập nhật Chuyên ngành (Sử dụng AddOrUpdate nếu có)
+        public void InsertUpdate(Major m)
+        {
+            Model1 context = new Model1();
+            context.Major.Add(m);
+            context.SaveChanges();
+        }
+
+        // 5. Xóa Chuyên ngành theo ID
+        public void Delete(int majorID)
+        {
+            Model1 context = new Model1();
+            var majorToDelete = context.Major.FirstOrDefault(p => p.MajorID == majorID);
+
+            if (majorToDelete != null)
+            {
+                context.Major.Remove(majorToDelete);
+                context.SaveChanges();
+            }
+        }
+    }
+}
