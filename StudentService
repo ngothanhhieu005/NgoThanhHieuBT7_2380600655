@@ -1,0 +1,81 @@
+using DAL.Entities;
+using System.Data.Entity;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace BUSS
+{
+    public class StudentService
+    {
+        public List<Student> GetAll()
+        {
+            Model1 context = new Model1();
+            return context.Student.ToList();
+        }
+
+        public List<Student> GetAllHasNoMajor()
+        {
+            Model1 context = new Model1();
+            return context.Student.Where(p => p.MajorID == null).ToList();
+        }
+
+        public List<Student> GetAllHasNoMajor(int facultyID)
+        {
+            Model1 context = new Model1();
+            return context.Student.Where(p => p.MajorID == null && p.FacultyID == facultyID).ToList();
+        }
+
+        public Student FindByID(string studentID)
+        {
+            Model1 context = new Model1();
+            return context.Student.FirstOrDefault(p => p.StudentID == studentID);
+        }
+
+        public void InsertUpdate(Student s)
+        {
+            Model1 context = new Model1();
+            var existingStudent = context.Student.FirstOrDefault(p => p.StudentID == s.StudentID);
+
+            if (existingStudent == null)
+            {
+                context.Student.Add(s);
+            }
+            else
+            {
+                context.Entry(existingStudent).CurrentValues.SetValues(s);
+            }
+            context.SaveChanges();
+        }
+
+        public object FindStudentByID(string studentID)
+        {
+            Model1 context = new Model1();
+            return context.Student.FirstOrDefault(p => p.StudentID == studentID);
+        }
+
+        public void InsertUpdateStudent(object obj)
+        {
+            if (obj is Student s)
+            {
+                Model1 context = new Model1();
+                var existingStudent = context.Student.FirstOrDefault(p => p.StudentID == s.StudentID);
+
+                if (existingStudent == null)
+                {
+                    context.Student.Add(s);
+                }
+                else
+                {
+                    context.Entry(existingStudent).CurrentValues.SetValues(s);
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public Student  FindStudentById(string text)
+        {
+            Model1 context = new Model1();
+            return context.Student.FirstOrDefault(p => p.StudentID == text);
+        }
+    }
+}
