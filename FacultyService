@@ -1,0 +1,49 @@
+using DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BUSS
+{
+    public class FacultyService
+    {
+        // 1. Lấy tất cả các Khoa (GetAll) - Đã có trong các ví dụ mẫu
+        public List<Faculty> GetAll()
+        {
+            // Giả sử StudentModel là DbContext của bạn (dùng chung cho toàn bộ ứng dụng)
+            Model1 context = new Model1();
+            return context.Faculty.ToList();
+        }
+
+        // 2. Tìm Khoa theo ID
+        public Faculty FindByID(int facultyID)
+        {
+            Model1 context = new Model1();
+            return context.Faculty.FirstOrDefault(p => p.FacultyID == facultyID);
+        }
+
+        // 3. Thêm hoặc Cập nhật Khoa (Sử dụng AddOrUpdate nếu có)
+        public void InsertUpdate(Faculty f)
+        {
+            Model1 context = new Model1();
+            // Cần using System.Data.Entity.Migrations;
+            context.Faculty.Add(f);
+            context.SaveChanges();
+        }
+
+        // 4. Xóa Khoa theo ID
+        public void Delete(int facultyID)
+        {
+            Model1 context = new Model1();
+            var facultyToDelete = context.Faculty.FirstOrDefault(p => p.FacultyID == facultyID);
+
+            if (facultyToDelete != null)
+            {
+                context.Faculty.Remove(facultyToDelete);
+                context.SaveChanges();
+            }
+        }
+    }
+}
